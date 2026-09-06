@@ -32,7 +32,7 @@ const Navbar = () => {
           <IoNotificationsOutline size={22} />
         </button>
 
-        <button className="rounded-lg bg-black px-4 py-1 text-white">
+        <button className="rounded-lg bg-blue-700 px-4 py-1 text-white">
           + New Task
         </button>
       </div>
