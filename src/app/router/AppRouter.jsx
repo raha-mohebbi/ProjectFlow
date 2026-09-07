@@ -5,8 +5,9 @@ import {
   Navigate,
 } from "react-router-dom";
 
+
 import LoginPage from "../../features/auth/pages/LoginPage";
-import RegisterPage from "../../features/auth/pages/RegisterPage";
+import RegisterPage from "../../features/auth/components/RegisterForm";
 import Dashboard from "../../components/layout/Dashboard";
 
 const AppRouter = () => {
