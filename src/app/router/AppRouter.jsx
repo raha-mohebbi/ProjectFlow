@@ -7,7 +7,7 @@ import {
 
 
 import LoginPage from "../../features/auth/pages/LoginPage";
-import RegisterPage from "../../features/auth/components/RegisterForm";
+import RegisterPage from "../../features/auth/pages/RegisterPage";
 import Dashboard from "../../components/layout/Dashboard";
 
 const AppRouter = () => {
