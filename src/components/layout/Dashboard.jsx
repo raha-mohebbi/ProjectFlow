@@ -1,6 +1,7 @@
 import { CiFilter } from "react-icons/ci";
 import { CiGrid41 } from "react-icons/ci";
 import { IoListOutline } from "react-icons/io5";
+import Tasks from "./Tasks";
 
 const Dashboard = () => {
   return (
@@ -67,7 +68,9 @@ const Dashboard = () => {
           Error
         </span>
       </div>
-      
+      <div className="mt-5">
+        <Tasks/>
+      </div>
     </main>
   );
 };
