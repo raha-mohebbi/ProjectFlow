@@ -1,21 +1,7 @@
-import Dashboard from "./components/layout/Dashboard";
-import Navbar from "./components/layout/Navbar";
-import SideBar from "./components/layout/SideBar";
+import AppRouter from "./app/router/AppRouter";
 
 function App() {
-  return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <SideBar />
-
-      {/* Main Content */}
-      <div className="flex-1">
-        <Navbar />
-
-        <Dashboard />
-      </div>
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;
