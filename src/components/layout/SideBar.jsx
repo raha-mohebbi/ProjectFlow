@@ -8,7 +8,7 @@ import { TbLayoutSidebarLeftCollapse } from "react-icons/tb";
 
 const SideBar = () => {
   return (
-    <aside className="flex min-h-screen w-60 flex-col border-r border-gray-200 bg-white p-4">
+    <aside className="fixed left-0 top-0 z-40 flex h-screen w-60 flex-col border-r border-gray-200 bg-white p-4">
       {/* Logo */}
       <div className="mb-8 text-xl font-bold text-gray-900">
         ProjectFlow
