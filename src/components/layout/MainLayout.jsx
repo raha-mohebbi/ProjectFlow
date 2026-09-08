@@ -5,13 +5,15 @@ import SideBar from "./SideBar";
 const MainLayout = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
-
       <SideBar />
 
-      <main className="ml-64">
-        <Outlet />
-      </main>
+      <div className="ml-60">
+        <Navbar />
+
+        <main>
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

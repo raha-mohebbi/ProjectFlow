@@ -4,10 +4,10 @@ import { IoIosSearch } from "react-icons/io";
 
 const Navbar = () => {
   return (
-    <nav className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-2">
-
-      <div className="flex items-center gap-6">
-        <p className="text-lg font-semibold">Projects</p>
+    <nav className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3">
+      
+      <div className="flex items-center gap-8">
+        
 
         <div className="relative">
           <IoIosSearch
@@ -18,7 +18,7 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search everything..."
-            className="w-72 rounded-lg border border-gray-200 py-1 pl-10 pr-4 outline-none"
+            className="w-72 rounded-lg border border-gray-200 py-2 pl-10 pr-4 outline-none focus:border-blue-500"
           />
         </div>
       </div>
@@ -32,7 +32,7 @@ const Navbar = () => {
           <IoNotificationsOutline size={22} />
         </button>
 
-        <button className="rounded-lg bg-blue-700 px-4 py-1 text-white">
+        <button className="rounded-lg bg-blue-700 px-4 py-2 text-white">
           + New Task
         </button>
       </div>
