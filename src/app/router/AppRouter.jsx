@@ -5,10 +5,10 @@ import {
   Navigate,
 } from "react-router-dom";
 
-
 import LoginPage from "../../features/auth/pages/LoginPage";
 import RegisterPage from "../../features/auth/pages/RegisterPage";
 import Dashboard from "../../components/layout/Dashboard";
+import MainLayout from "../../components/layout/MainLayout";
 
 const AppRouter = () => {
   return (
@@ -32,11 +32,15 @@ const AppRouter = () => {
           element={<RegisterPage />}
         />
 
-        {/* Dashboard */}
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
+        {/* Main Application */}
+        <Route element={<MainLayout />}>
+
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
+
+        </Route>
 
       </Routes>
     </BrowserRouter>
