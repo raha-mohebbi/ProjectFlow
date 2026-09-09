@@ -2,7 +2,7 @@ import { CiFolderOn } from "react-icons/ci";
 
 const Tasks = () => {
   return (
-    <div className="grid grid-cols-3 gap-5">
+    <div className="grid grid-cols-2 gap-5">
 
       {/* Website Redesign */}
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
@@ -57,8 +57,8 @@ const Tasks = () => {
 {/* Dashboard */}
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="rounded-lg bg-green-100 p-2">
-            <CiFolderOn className="text-green-600" size={20} />
+          <div className="rounded-lg bg-red-100 p-2">
+            <CiFolderOn className="text-red-600" size={20} />
           </div>
 
           <h3 className="text-lg font-semibold">
