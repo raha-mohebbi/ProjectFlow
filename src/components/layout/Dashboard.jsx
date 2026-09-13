@@ -1,9 +1,16 @@
 import { CiFilter } from "react-icons/ci";
 import { CiGrid41 } from "react-icons/ci";
 import { IoListOutline } from "react-icons/io5";
+
+import { useState } from "react";
+
+
 import Tasks from "./Tasks";
+import CreateProjectModal from "../CreateProjectModal";
+
 
 const Dashboard = () => {
+  const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
   return (
     <main className="p-6">
       {/* Header */}
@@ -15,11 +22,14 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <button className="rounded-lg bg-blue-700 px-4 py-2 text-sm text-white">
+        <button onClick={() => setIsCreateProjectOpen(true)} className="rounded-lg bg-blue-700 px-4 py-2 text-sm text-white">
           + New Project
         </button>
       </div>
-
+<CreateProjectModal
+    isOpen={ isCreateProjectOpen}
+    onClose={() => setIsCreateProjectOpen(false)}
+  />
       {/* Search & Filter + Grid/List */}
       <div className="mt-6 flex items-center justify-between">
 
