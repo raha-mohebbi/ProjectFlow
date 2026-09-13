@@ -1,4 +1,7 @@
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+import { supabase } from "../lib/supabase";
 
 const CreateProjectModal = ({ isOpen, onClose }) => {
   const initialValues = {
@@ -6,16 +9,57 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
     project_description: "",
     project_status: "active",
     project_color: "red",
-    project_members: [],
   };
+
+  const validationSchema = Yup.object({
+    project_name: Yup.string().required("Project name is required"),
+  });
 
   if (!isOpen) return null;
 
   return (
-    <Formik initialValues={initialValues}>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={async (values) => {
+        // Get current logged-in user
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        console.log("Current User:", user);
+
+        if (!user) {
+          console.error("User is not authenticated");
+          return;
+        }
+
+        // Insert project into Supabase
+        const { data, error } = await supabase
+          .from("projects")
+          .insert({
+            name: values.project_name,
+            description: values.project_description,
+            status: values.project_status,
+            color: values.project_color,
+            created_by: user.id,
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error("Error creating project:", error);
+          return;
+        }
+
+        console.log("Project created successfully:", data);
+
+        // Close modal after successful creation
+        onClose();
+      }}
+    >
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
         <Form className="w-full max-w-lg rounded-2xl bg-white shadow-xl">
-
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
             <div>
@@ -39,7 +83,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
 
           {/* Form Content */}
           <div className="space-y-5 px-6 py-6">
-
             {/* Project Name */}
             <div>
               <label
@@ -55,6 +98,12 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
                 type="text"
                 placeholder="Enter project name"
                 className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              />
+
+              <ErrorMessage
+                name="project_name"
+                component="div"
+                className="mt-1 text-sm text-red-600"
               />
             </div>
 
@@ -79,7 +128,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
 
             {/* Status & Color */}
             <div className="grid grid-cols-1 gap-4">
-
               {/* Status */}
               <div>
                 <label
@@ -103,67 +151,67 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
 
               {/* Color */}
               <div>
-  <label className="mb-2 block text-sm font-medium text-gray-700">
-    Color
-  </label>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Color
+                </label>
 
-  <div className="flex items-center gap-3">
-    <label className="cursor-pointer">
-      <Field
-        type="radio"
-        name="project_color"
-        value="red"
-        className="peer sr-only"
-      />
+                <div className="flex items-center gap-3">
+                  <label className="cursor-pointer">
+                    <Field
+                      type="radio"
+                      name="project_color"
+                      value="red"
+                      className="peer sr-only"
+                    />
 
-      <span className="block h-7 w-7 rounded-full bg-red-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-red-500 peer-checked:ring-offset-2" />
-    </label>
+                    <span className="block h-7 w-7 rounded-full bg-red-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-red-500 peer-checked:ring-offset-2" />
+                  </label>
 
-    <label className="cursor-pointer">
-      <Field
-        type="radio"
-        name="project_color"
-        value="blue"
-        className="peer sr-only"
-      />
+                  <label className="cursor-pointer">
+                    <Field
+                      type="radio"
+                      name="project_color"
+                      value="blue"
+                      className="peer sr-only"
+                    />
 
-      <span className="block h-7 w-7 rounded-full bg-blue-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-blue-500 peer-checked:ring-offset-2" />
-    </label>
+                    <span className="block h-7 w-7 rounded-full bg-blue-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-blue-500 peer-checked:ring-offset-2" />
+                  </label>
 
-    <label className="cursor-pointer">
-      <Field
-        type="radio"
-        name="project_color"
-        value="green"
-        className="peer sr-only"
-      />
+                  <label className="cursor-pointer">
+                    <Field
+                      type="radio"
+                      name="project_color"
+                      value="green"
+                      className="peer sr-only"
+                    />
 
-      <span className="block h-7 w-7 rounded-full bg-green-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-green-500 peer-checked:ring-offset-2" />
-    </label>
+                    <span className="block h-7 w-7 rounded-full bg-green-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-green-500 peer-checked:ring-offset-2" />
+                  </label>
 
-    <label className="cursor-pointer">
-      <Field
-        type="radio"
-        name="project_color"
-        value="yellow"
-        className="peer sr-only"
-      />
+                  <label className="cursor-pointer">
+                    <Field
+                      type="radio"
+                      name="project_color"
+                      value="yellow"
+                      className="peer sr-only"
+                    />
 
-      <span className="block h-7 w-7 rounded-full bg-yellow-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-yellow-400 peer-checked:ring-offset-2" />
-    </label>
+                    <span className="block h-7 w-7 rounded-full bg-yellow-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-yellow-400 peer-checked:ring-offset-2" />
+                  </label>
 
-    <label className="cursor-pointer">
-      <Field
-        type="radio"
-        name="project_color"
-        value="purple"
-        className="peer sr-only"
-      />
+                  <label className="cursor-pointer">
+                    <Field
+                      type="radio"
+                      name="project_color"
+                      value="purple"
+                      className="peer sr-only"
+                    />
 
-      <span className="block h-7 w-7 rounded-full bg-purple-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-purple-500 peer-checked:ring-offset-2" />
-    </label>
-  </div>
-</div>
+                    <span className="block h-7 w-7 rounded-full bg-purple-600 ring-2 ring-transparent transition peer-checked:ring-2 peer-checked:ring-purple-500 peer-checked:ring-offset-2" />
+                  </label>
+                </div>
+              </div>
             </div>
 
             {/* Members */}
@@ -187,12 +235,10 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
                 You can add project members later.
               </p>
             </div>
-
           </div>
 
-          {/* Footer */}
+          {/* buttons */}
           <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-6 py-4">
-
             <button
               type="button"
               onClick={onClose}
@@ -207,7 +253,6 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
             >
               Create Project
             </button>
-
           </div>
         </Form>
       </div>
@@ -216,4 +261,3 @@ const CreateProjectModal = ({ isOpen, onClose }) => {
 };
 
 export default CreateProjectModal;
-
