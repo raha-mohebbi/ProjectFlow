@@ -56,7 +56,7 @@ const SideBar = () => {
       toast.success("Logged out successfully!");
 
       navigate("/login");
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
     }
   };
