@@ -16,6 +16,7 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [viewMode, setViewMode] = useState("grid");
   useEffect(() => {
     const getProjects = async () => {
       const {
@@ -52,7 +53,7 @@ const Dashboard = () => {
       (filter === "all" || project.status === filter),
   );
 
-  const handlefilterChange = (e) => {
+  const handleFilterChange = (e) => {
     setFilter(e.target.value);
     setIsFilterOpen(false);
   };
@@ -105,7 +106,7 @@ const Dashboard = () => {
                     name="filter"
                     value="all"
                     checked={filter === "all"}
-                    onChange={handlefilterChange}
+                    onChange={handleFilterChange}
                   />
                   All
                 </label>
@@ -115,7 +116,7 @@ const Dashboard = () => {
                     name="filter"
                     value="active"
                     checked={filter === "active"}
-                    onChange={handlefilterChange}
+                    onChange={handleFilterChange}
                   />
                   Active
                 </label>
@@ -126,7 +127,7 @@ const Dashboard = () => {
                     name="filter"
                     value="inactive"
                     checked={filter === "inactive"}
-                    onChange={handlefilterChange}
+                    onChange={handleFilterChange}
                   />
                   Inactive
                 </label>
@@ -136,7 +137,7 @@ const Dashboard = () => {
                     name="filter"
                     value="completed"
                     checked={filter === "completed"}
-                    onChange={handlefilterChange}
+                    onChange={handleFilterChange}
                   />
                   Completed
                 </label>
@@ -146,12 +147,26 @@ const Dashboard = () => {
         </div>
 
         <div className="flex items-center gap-1 rounded-lg border border-gray-200/70 bg-white/60 px-2 py-1 backdrop-blur-md">
-          <button className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-gray-600">
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`flex items-center gap-1 rounded-md px-2 py-1 text-xs ${
+              viewMode === "grid"
+                ? "bg-gray-100 text-gray-900"
+                : "text-gray-600"
+            }`}
+          >
             <CiGrid41 size={16} />
             Grid
           </button>
 
-          <button className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-gray-600">
+          <button
+            onClick={() => setViewMode("list")}
+            className={`flex items-center gap-1 rounded-md px-2 py-1 text-xs ${
+              viewMode === "list"
+                ? "bg-gray-100 text-gray-900"
+                : "text-gray-600"
+            }`}
+          >
             <IoListOutline size={16} />
             List
           </button>
@@ -179,7 +194,13 @@ const Dashboard = () => {
       <div className="mt-5">
         <Tasks />
       </div>
-      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div
+        className={
+          viewMode === "grid"
+            ? "mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            : "mt-5 flex flex-col gap-4"
+        }
+      >
         {filteredProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
