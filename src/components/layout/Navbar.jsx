@@ -2,7 +2,7 @@ import { MdOutlineLightMode } from "react-icons/md";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
 
-const Navbar = () => {
+const Navbar = ({onNewTask}) => {
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3">
       
@@ -32,7 +32,7 @@ const Navbar = () => {
           <IoNotificationsOutline size={22} />
         </button>
 
-        <button className="rounded-lg bg-blue-700 px-4 py-2 text-white">
+        <button onClick={onNewTask} className="rounded-lg bg-blue-700 px-4 py-2 text-white">
           + New Task
         </button>
       </div>

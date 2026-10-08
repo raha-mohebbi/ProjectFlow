@@ -1,5 +1,6 @@
 import { Formik, Form, Field } from "formik";
 import { supabase } from "../lib/supabase";
+import { useState, useEffect } from "react";
 
 const CreateTaskModal = ({ isOpen, onClose }) => {
   const initialValues = {
@@ -9,6 +10,34 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
     status: "todo",
     priority: "medium",
   };
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    const getProjects = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        console.error("User is not authenticated");
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("projects")
+        .select("id, name")
+        .eq("created_by", user.id);
+
+      if (error) {
+        console.error("Error fetching projects:", error);
+        return;
+      }
+
+      setProjects(data);
+    };
+
+    getProjects();
+  }, []);
 
   if (!isOpen) {
     return null;
@@ -112,8 +141,11 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
               >
                 <option value="">Select Project</option>
-                <option value="project-a">Project A</option>
-                <option value="project-b">Project B</option>
+                {projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
               </Field>
             </div>
 
