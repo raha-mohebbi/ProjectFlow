@@ -17,6 +17,35 @@ const Dashboard = () => {
   const [filter, setFilter] = useState("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
+  const [tasks, setTasks] = useState([]);
+  useEffect(() => {
+    const getTasks = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        console.error("User is not authenticated");
+        return;
+      }
+      const { data, error } = await supabase
+        .from("tasks")
+        .select(
+          `
+    *,
+    project:projects (
+      name
+    )
+  `,
+        )
+        .eq("created_by", user.id);
+      if (error) {
+        console.error("Error fetching tasks:", error);
+        return;
+      }
+      setTasks(data);
+    };
+    getTasks();
+  }, []);
   useEffect(() => {
     const getProjects = async () => {
       const {
@@ -192,7 +221,7 @@ const Dashboard = () => {
         </span>
       </div>
       <div className="mt-5">
-        <Tasks />
+        <Tasks tasks={tasks} />
       </div>
       <div
         className={
