@@ -1,6 +1,12 @@
 import { CiFolderOn } from "react-icons/ci";
 
-const Tasks = ({ tasks }) => {
+const Tasks = ({
+  tasks,
+  totalProjects,
+  totalTasks,
+  completedTasks,
+  overdueTasks,
+}) => {
   return (
     <div>
       {/* Summary Cards */}
@@ -12,7 +18,7 @@ const Tasks = ({ tasks }) => {
               <CiFolderOn className="text-blue-600" size={20} />
             </div>
 
-            <h3 className="text-lg font-semibold text-gray-900">12</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{totalProjects}</h3>
           </div>
 
           <p className="mt-3 text-sm text-gray-500">Total Projects</p>
@@ -25,7 +31,7 @@ const Tasks = ({ tasks }) => {
               <CiFolderOn className="text-purple-600" size={20} />
             </div>
 
-            <h3 className="text-lg font-semibold text-gray-900">148</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{totalTasks}</h3>
           </div>
 
           <p className="mt-3 text-sm text-gray-500">Total Tasks</p>
@@ -38,7 +44,7 @@ const Tasks = ({ tasks }) => {
               <CiFolderOn className="text-green-600" size={20} />
             </div>
 
-            <h3 className="text-lg font-semibold text-gray-900">92</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{completedTasks}</h3>
           </div>
 
           <p className="mt-3 text-sm text-gray-500">Completed</p>
@@ -51,7 +57,7 @@ const Tasks = ({ tasks }) => {
               <CiFolderOn className="text-red-600" size={20} />
             </div>
 
-            <h3 className="text-lg font-semibold text-gray-900">7</h3>
+            <h3 className="text-lg font-semibold text-gray-900">{overdueTasks}</h3>
           </div>
 
           <p className="mt-3 text-sm text-gray-500">Overdue</p>
