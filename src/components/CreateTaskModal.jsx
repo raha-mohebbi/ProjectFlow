@@ -2,6 +2,7 @@ import { Formik, Form, Field } from "formik";
 import { supabase } from "../lib/supabase";
 import { useState, useEffect } from "react";
 
+
 const CreateTaskModal = ({ isOpen, onClose }) => {
   const initialValues = {
     title: "",
@@ -9,8 +10,10 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
     project_id: "",
     status: "todo",
     priority: "medium",
+    due_date:""
   };
   const [projects, setProjects] = useState([]);
+ 
 
   useEffect(() => {
     const getProjects = async () => {
@@ -85,6 +88,7 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
                 status: values.status,
                 priority: values.priority,
                 created_by: user.id,
+                due_date: values.due_date,
               })
               .select()
               .single();
@@ -182,6 +186,22 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
                 <option value="high">High</option>
               </Field>
             </div>
+                  
+                     {/* Due Date */}
+<div className="mt-4">
+  <label className="mb-1 block text-sm font-medium text-gray-700">
+    Due Date
+  </label>
+
+  <div className="relative">
+    <Field
+      name="due_date"
+      type="date"
+      className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-blue-500"
+    />
+  </div>
+</div>
+
 
             {/* Submit */}
             <button
