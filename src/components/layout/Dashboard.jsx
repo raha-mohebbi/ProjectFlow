@@ -5,10 +5,12 @@ import { CiGrid41 } from "react-icons/ci";
 import { IoListOutline } from "react-icons/io5";
 
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import Tasks from "./Tasks";
 import CreateProjectModal from "../CreateProjectModal";
 import ProjectCard from "../ProjectCard";
+import { setTasks } from "../../store/taskSlice";
 
 const Dashboard = () => {
   const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
@@ -17,7 +19,8 @@ const Dashboard = () => {
   const [filter, setFilter] = useState("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
-  const [tasks, setTasks] = useState([]);
+  const reduxTasks = useSelector((state) => state.tasks.tasks);
+  const dispatch = useDispatch();
   useEffect(() => {
     const getTasks = async () => {
       const {
@@ -42,7 +45,7 @@ const Dashboard = () => {
         console.error("Error fetching tasks:", error);
         return;
       }
-      setTasks(data);
+      dispatch(setTasks(data));
     };
     getTasks();
   }, []);
@@ -81,6 +84,21 @@ const Dashboard = () => {
       project.name.toLowerCase().includes(search.toLowerCase()) &&
       (filter === "all" || project.status === filter),
   );
+
+  const totalProjects = projects.length;
+
+  const totalTasks = reduxTasks.length;
+
+  const completedTasks = reduxTasks.filter(
+    (task) => task.status === "done",
+  ).length;
+
+  const overdueTasks = reduxTasks.filter(
+    (task) =>
+      task.due_date &&
+      task.due_date < new Date().toISOString().split("T")[0] &&
+      task.status !== "done",
+  ).length;
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
@@ -221,7 +239,13 @@ const Dashboard = () => {
         </span>
       </div>
       <div className="mt-5">
-        <Tasks tasks={tasks} />
+        <Tasks
+          tasks={reduxTasks}
+          totalProjects={totalProjects}
+          totalTasks={totalTasks}
+          completedTasks={completedTasks}
+          overdueTasks={overdueTasks}
+        />
       </div>
       <div
         className={
