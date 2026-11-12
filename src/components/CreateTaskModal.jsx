@@ -1,9 +1,13 @@
 import { Formik, Form, Field } from "formik";
 import { supabase } from "../lib/supabase";
 import { useState, useEffect } from "react";
+import { useDispatch,useSelector } from "react-redux";
+import { setTasks } from "../store/taskSlice";
 
 
 const CreateTaskModal = ({ isOpen, onClose }) => {
+  const dispatch=useDispatch();
+  const reduxTasks = useSelector((state) => state.tasks.tasks);
   const initialValues = {
     title: "",
     description: "",
@@ -67,7 +71,7 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
         {/* Content */}
         <Formik
           initialValues={initialValues}
-          onSubmit={async (values) => {
+          onSubmit={async (values,{ resetForm }) => {
             console.log(values);
             const {
               data: { user },
@@ -97,12 +101,15 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
               console.error("Error creating task:", error);
               return;
             }
-
+dispatch(setTasks([...reduxTasks, data]));
+resetForm();
+onClose();
             console.log("Task created successfully:", data);
 
             onClose();
           }}
         >
+            {({ isSubmitting }) => (
           <Form className="space-y-4 p-6">
             {/* Title */}
             <div>
@@ -204,13 +211,19 @@ const CreateTaskModal = ({ isOpen, onClose }) => {
 
 
             {/* Submit */}
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-blue-700 py-2.5 text-sm font-semibold text-white hover:bg-blue-800"
-            >
-              Create Task
-            </button>
+      <button
+  type="submit"
+  disabled={isSubmitting}
+  className={`w-full rounded-lg py-2.5 text-sm font-semibold text-white ${
+    isSubmitting
+      ? "cursor-not-allowed bg-gray-400"
+      : "bg-blue-700 hover:bg-blue-800"
+  }`}
+>
+  {isSubmitting ? "Creating..." : "Create Task"}
+</button>
           </Form>
+           )}
         </Formik>
       </div>
     </div>
