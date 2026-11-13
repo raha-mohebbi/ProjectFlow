@@ -11,16 +11,19 @@ import Tasks from "./Tasks";
 import CreateProjectModal from "../CreateProjectModal";
 import ProjectCard from "../ProjectCard";
 import { setTasks } from "../../store/taskSlice";
+import { setProjects } from "../../store/projectSlice";
 
 const Dashboard = () => {
-  const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [viewMode, setViewMode] = useState("grid");
-  const reduxTasks = useSelector((state) => state.tasks.tasks);
-  const dispatch = useDispatch();
+const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
+const [search, setSearch] = useState("");
+const [filter, setFilter] = useState("all");
+const [isFilterOpen, setIsFilterOpen] = useState(false);
+const [viewMode, setViewMode] = useState("grid");
+
+const reduxTasks = useSelector((state) => state.tasks.tasks);
+const reduxProjects = useSelector((state) => state.projects.projects);
+
+const dispatch = useDispatch();
   useEffect(() => {
     const getTasks = async () => {
       const {
@@ -72,20 +75,20 @@ const Dashboard = () => {
         return;
       }
 
-      setProjects(data);
+ dispatch(setProjects(data));
       console.log("Projects:", data);
     };
 
     getProjects();
   }, []);
 
-  const filteredProjects = projects.filter(
-    (project) =>
-      project.name.toLowerCase().includes(search.toLowerCase()) &&
-      (filter === "all" || project.status === filter),
-  );
+  const filteredProjects = reduxProjects.filter(
+  (project) =>
+    project.name.toLowerCase().includes(search.toLowerCase()) &&
+    (filter === "all" || project.status === filter),
+);
 
-  const totalProjects = projects.length;
+const totalProjects = reduxProjects.length;
 
   const totalTasks = reduxTasks.length;
 
@@ -111,7 +114,7 @@ const Dashboard = () => {
         <div>
           <h1 className="text-2xl font-semibold">Projects</h1>
           <p className="mt-1 text-sm text-gray-500">
-            {projects.length} {projects.length === 1 ? "project" : "projects"}{" "}
+{reduxProjects.length} {reduxProjects.length === 1 ? "project" : "projects"}
             across your workspace
           </p>
         </div>
