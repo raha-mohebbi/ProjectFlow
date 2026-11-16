@@ -6,6 +6,7 @@ import { IoListOutline } from "react-icons/io5";
 
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useOutletContext } from "react-router-dom";
 
 import Tasks from "./Tasks";
 import CreateProjectModal from "../CreateProjectModal";
@@ -14,16 +15,18 @@ import { setTasks } from "../../store/taskSlice";
 import { setProjects } from "../../store/projectSlice";
 
 const Dashboard = () => {
-const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
-const [search, setSearch] = useState("");
-const [filter, setFilter] = useState("all");
-const [isFilterOpen, setIsFilterOpen] = useState(false);
-const [viewMode, setViewMode] = useState("grid");
+  const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [viewMode, setViewMode] = useState("grid");
 
-const reduxTasks = useSelector((state) => state.tasks.tasks);
-const reduxProjects = useSelector((state) => state.projects.projects);
+  const reduxTasks = useSelector((state) => state.tasks.tasks);
+  const reduxProjects = useSelector((state) => state.projects.projects);
 
-const dispatch = useDispatch();
+  const { handleEditTask, handleDeleteTask } = useOutletContext();
+
+  const dispatch = useDispatch();
   useEffect(() => {
     const getTasks = async () => {
       const {
@@ -75,7 +78,7 @@ const dispatch = useDispatch();
         return;
       }
 
- dispatch(setProjects(data));
+      dispatch(setProjects(data));
       console.log("Projects:", data);
     };
 
@@ -83,12 +86,12 @@ const dispatch = useDispatch();
   }, []);
 
   const filteredProjects = reduxProjects.filter(
-  (project) =>
-    project.name.toLowerCase().includes(search.toLowerCase()) &&
-    (filter === "all" || project.status === filter),
-);
+    (project) =>
+      project.name.toLowerCase().includes(search.toLowerCase()) &&
+      (filter === "all" || project.status === filter),
+  );
 
-const totalProjects = reduxProjects.length;
+  const totalProjects = reduxProjects.length;
 
   const totalTasks = reduxTasks.length;
 
@@ -114,7 +117,8 @@ const totalProjects = reduxProjects.length;
         <div>
           <h1 className="text-2xl font-semibold">Projects</h1>
           <p className="mt-1 text-sm text-gray-500">
-{reduxProjects.length} {reduxProjects.length === 1 ? "project" : "projects"}
+            {reduxProjects.length}{" "}
+            {reduxProjects.length === 1 ? "project" : "projects"}
             across your workspace
           </p>
         </div>
@@ -248,6 +252,8 @@ const totalProjects = reduxProjects.length;
           totalTasks={totalTasks}
           completedTasks={completedTasks}
           overdueTasks={overdueTasks}
+          onEdit={handleEditTask}
+          onDelete={handleDeleteTask}
         />
       </div>
       <div
